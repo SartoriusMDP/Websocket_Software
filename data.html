@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Temp & Humidity Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        background-color: #111;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      .navbar {
+        background-color: #ffed00;
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        font-weight: bold;
+      }
+
+      .logo {
+        color: #000;
+        font-size: 1.4rem;
+      }
+
+      .nav-menu a {
+        color: #000;
+        margin-left: 1.5rem;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        text-decoration: underline;
+        color: #333;
+      }
+
+      h1 {
+        margin: 1.5rem 0 0.5rem;
+      }
+
+      .chart-box {
+        background-color: #222;
+        border-radius: 10px;
+        padding: 1rem;
+        width: 800px; /* Default bigger width */
+        max-width: 90vw;
+        box-sizing: border-box;
+      }
+
+      .charts-container {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: nowrap; /* Prevent wrapping on tablets and up */
+        margin-bottom: 2rem;
+        padding-bottom: 0.5rem; /* Space for scrollbar if needed */
+        overflow-x: auto; /* Allow horizontal scroll on narrow screens */
+      }
+
+      /* Shrink charts on smaller laptops */
+      @media (max-width: 1800px) {
+        .chart-box {
+          width: 650px;
+        }
+      }
+
+      @media (max-width: 1300px) {
+        .chart-box {
+          width: 550px;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .chart-box {
+          width: 450px;
+        }
+      }
+
+      /* Mobile screens: stack vertically */
+      @media (max-width: 700px) {
+        .charts-container {
+          flex-direction: column;
+          gap: 1.5rem;
+          overflow-x: visible; /* Remove horizontal scroll for vertical layout */
+        }
+        .chart-box {
+          width: 90vw;
+          max-width: none;
+        }
+        /* Also stack bottom section panels vertically on mobile */
+        .bottom-section {
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        .panel {
+          width: 90vw;
+          max-width: none;
+        }
+      }
+
+      .value-display {
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        color: #ccc;
+      }
+
+      .bottom-section {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin: 0 auto 3rem;
+        max-width: 1600px;
+      }
+
+      .panel {
+        background-color: #222;
+        padding: 1rem 1rem 1.5rem; /* increased vertical padding */
+        border-radius: 10px;
+        width: 450px;
+        text-align: left;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        font-size: 1.1rem; /* slightly bigger text */
+      }
+
+      .panel h2 {
+        color: #ffed00;
+        margin-top: 0;
+        font-size: 1.4rem; /* bigger heading */
+        margin-bottom: 1.5rem;
+      }
+
+      .panel input[type="text"],
+      .panel input[type="number"] {
+        padding: 0.75rem;
+        border-radius: 5px;
+        border: 1px solid #555;
+        width: 100%;
+        background-color: #111;
+        color: #fff;
+        font-size: 1.1rem; /* bigger inputs */
+        box-sizing: border-box;
+        margin-bottom: 1rem; /* increased spacing */
+      }
+
+      ::placeholder {
+        color: #888;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem; /* bigger bottom margin */
+      }
+
+      .main-btn {
+        padding: 1rem 1.2rem; /* bigger buttons */
+        font-weight: bold;
+        font-size: 1.1rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        flex: 1;
+        user-select: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .start-btn {
+        background-color: #ffed00;
+        color: #000;
+      }
+
+      .start-btn:disabled {
+        background-color: #444;
+        color: #999;
+        cursor: not-allowed;
+      }
+
+      .cancel-btn {
+        background-color: #f01109;
+        color: #fff;
+      }
+
+      .cancel-btn:disabled {
+        background-color: #333;
+        color: #999;
+        cursor: not-allowed;
+      }
+
+      .pause-btn {
+        background-color: #05d9ff;
+        color: #000;
+      }
+
+      .pause-btn:disabled {
+        background-color: #444;
+        color: #999;
+        cursor: not-allowed;
+      }
+
+      .status {
+        margin-top: 0;
+        color: #ccc;
+        font-size: 1.05rem; /* bigger status text */
+        min-height: 1.5rem;
+        user-select: none;
+        margin-bottom: 1rem; /* add spacing below status */
+      }
+
+      .progress-container {
+        background-color: #333;
+        border-radius: 6px;
+        height: 24px; /* taller progress bar */
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 1.5rem; /* spacing below progress bar */
+      }
+
+      .progress-bar {
+        background-color: #ffed00;
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      .log-entries {
+        list-style: none;
+        padding-left: 1rem;
+        color: #ccc;
+        font-size: 1rem; /* bigger font */
+        max-height: 320px; /* taller log area */
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #ffed00 #222;
+      }
+
+      .log-entries::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .log-entries::-webkit-scrollbar-thumb {
+        background-color: #ffed00;
+        border-radius: 6px;
+      }
+
+      .log-entries li {
+        margin-bottom: 0.75rem; /* bigger spacing */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .log-entries button {
+        background-color: #ffed00;
+        color: #000;
+        border: none;
+        padding: 0.5rem 0.8rem; /* bigger button */
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        font-weight: bold;
+        user-select: none;
+        transition: background-color 0.2s ease;
+      }
+
+      .log-entries button:hover {
+        background-color: #e6d900;
+      }
+
+      #experimentName {
+        margin-bottom: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">Sartorius MDP</div>
+      <nav class="nav-menu">
+        <a
+          href="index.html"
+          class="active"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Main Controller</a
+        >
+        <a href="#" class="active">Data Visualizer</a>
+      </nav>
+    </header>
+    <h1></h1>
+    <div class="charts-container">
+      <div class="chart-box">
+        <canvas id="tempChart"></canvas>
+        <div id="tempValue" class="value-display">Temp: -- °C</div>
+      </div>
+
+      <div class="chart-box">
+        <canvas id="humidityChart"></canvas>
+        <div id="humidityValue" class="value-display">Humidity: -- %</div>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <!-- Queue Experiment Panel (LEFT) -->
+      <div class="panel" id="experimentPanel">
+        <h2>Queue Experiment</h2>
+        <input
+          type="text"
+          id="experimentName"
+          placeholder="Experiment name..."
+        />
+
+        <input
+          type="number"
+          id="experimentLength"
+          placeholder="Length (seconds)..."
+          min="1"
+        />
+
+        <div class="btn-row">
+          <button class="main-btn start-btn" id="startExperiment">Start</button>
+          <button class="main-btn pause-btn" id="pauseExperiment" disabled>
+            Pause
+          </button>
+          <button class="main-btn cancel-btn" id="cancelExperiment" disabled>
+            Cancel
+          </button>
+        </div>
+
+        <div class="status" id="experimentStatus">No experiment running.</div>
+        <div class="progress-container" aria-label="Experiment progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <!-- Experiment Logs Panel (RIGHT) -->
+      <div class="panel" id="logsPanel">
+        <h2>Experiment Logs</h2>
+        <ul class="log-entries" id="logList">
+          <li>No logs yet.</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      // Chart Setup
+      function createChart(ctx, label, color) {
+        return new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label,
+                data: [],
+                borderColor: color,
+                backgroundColor: color + "22",
+                tension: 0.2,
+                pointRadius: 1,
+              },
+            ],
+          },
+          options: {
+            animation: false,
+            responsive: true,
+            plugins: {
+              legend: { labels: { color: "white" } },
+            },
+            scales: {
+              x: { ticks: { color: "white" }, grid: { color: "#444" } },
+              y: {
+                beginAtZero: true,
+                ticks: { color: "white" },
+                grid: { color: "#444" },
+              },
+            },
+          },
+        });
+      }
+
+      const tempChart = createChart(
+        document.getElementById("tempChart").getContext("2d"),
+        "Temperature (°C)",
+        "yellow"
+      );
+      const humidityChart = createChart(
+        document.getElementById("humidityChart").getContext("2d"),
+        "Humidity (%)",
+        "cyan"
+      );
+
+      function updateChart(chart, value, labelTextId, unit) {
+        const now = new Date().toLocaleTimeString();
+        if (chart.data.labels.length >= 10) {
+          chart.data.labels.shift();
+          chart.data.datasets[0].data.shift();
+        }
+        chart.data.labels.push(now);
+        chart.data.datasets[0].data.push(value);
+        chart.update();
+        document.getElementById(labelTextId).textContent = `${
+          chart.data.datasets[0].label.split(" ")[0]
+        }: ${value.toFixed(1)} ${unit}`;
+      }
+
+      setInterval(() => {
+        updateChart(tempChart, 36 + Math.random() * 2, "tempValue", "°C");
+        updateChart(
+          humidityChart,
+          45 + Math.random() * 10,
+          "humidityValue",
+          "%"
+        );
+      }, 1000);
+
+      const logs = [];
+
+      function renderLogs() {
+        const logList = document.getElementById("logList");
+        logList.innerHTML = "";
+
+        if (logs.length === 0) {
+          logList.innerHTML = "<li>No logs yet.</li>";
+        } else {
+          logs.forEach((entry, i) => {
+            const li = document.createElement("li");
+
+            const span = document.createElement("span");
+            span.textContent = entry;
+
+            const button = document.createElement("button");
+            button.textContent = "Download";
+            button.onclick = () => {
+              const blob = new Blob([entry], { type: "text/plain" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `experiment_log_${i + 1}.txt`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            };
+
+            li.appendChild(span);
+            li.appendChild(button);
+            logList.appendChild(li);
+          });
+        }
+      }
+
+      let experimentTimer = null;
+      let remainingTime = 0;
+      let totalLength = 0;
+      let paused = false;
+
+      const startBtn = document.getElementById("startExperiment");
+      const pauseBtn = document.getElementById("pauseExperiment");
+      const cancelBtn = document.getElementById("cancelExperiment");
+      const statusDiv = document.getElementById("experimentStatus");
+      const progressBar = document.getElementById("progressBar");
+
+      function updateStatus(name, timeLeft) {
+        if (paused) {
+          statusDiv.textContent = `Paused "${name}" — ${timeLeft}s left`;
+        } else {
+          statusDiv.textContent = `Running "${name}" — ${timeLeft}s left`;
+        }
+      }
+
+      function updateProgress(elapsed) {
+        if (totalLength === 0) return;
+        const percent = (elapsed / totalLength) * 100;
+        progressBar.style.width = percent + "%";
+      }
+
+      function endExperiment(name) {
+        const timestamp = new Date().toLocaleString();
+        const log = `${timestamp} — Completed: ${name}`;
+        logs.unshift(log);
+        renderLogs();
+        statusDiv.textContent = `Experiment "${name}" complete.`;
+        progressBar.style.width = "100%";
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        pauseBtn.textContent = "Pause";
+        cancelBtn.disabled = true;
+        paused = false;
+      }
+
+      function runTimer(name) {
+        let elapsed = 0;
+        updateProgress(elapsed);
+        updateStatus(name, remainingTime);
+
+        experimentTimer = setInterval(() => {
+          if (!paused) {
+            elapsed++;
+            remainingTime--;
+            updateProgress(elapsed);
+            if (remainingTime <= 0) {
+              clearInterval(experimentTimer);
+              endExperiment(name);
+            } else {
+              updateStatus(name, remainingTime);
+            }
+          }
+        }, 1000);
+      }
+
+      startBtn.addEventListener("click", () => {
+        const name = document.getElementById("experimentName").value.trim();
+        const length = parseInt(
+          document.getElementById("experimentLength").value,
+          10
+        );
+
+        if (!name) {
+          alert("Please enter an experiment name.");
+          return;
+        }
+        if (!length || length <= 0) {
+          alert("Please enter a valid experiment length (in seconds).");
+          return;
+        }
+
+        startBtn.disabled = true;
+        pauseBtn.disabled = false;
+        cancelBtn.disabled = false;
+        paused = false;
+        pauseBtn.textContent = "Pause";
+
+        remainingTime = length;
+        totalLength = length;
+
+        progressBar.style.width = "0%";
+        updateStatus(name, remainingTime);
+        experimentStart(name, remainingTime);
+        runTimer(name);
+      });
+
+      pauseBtn.addEventListener("click", () => {
+        const name =
+          document.getElementById("experimentName").value.trim() ||
+          "Experiment";
+        if (paused) {
+          paused = false;
+          pauseBtn.textContent = "Pause";
+          experimentUpdate(name, "Resume");
+        } else {
+          paused = true;
+          pauseBtn.textContent = "Resume";
+          experimentUpdate(name, "Pause");
+        }
+
+        updateStatus(name, remainingTime);
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        if (confirm("Are you sure you want to cancel the experiment?")) {
+          clearInterval(experimentTimer);
+          const name =
+            document.getElementById("experimentName").value.trim() ||
+            "Experiment";
+          experimentUpdate(name, "Stop");
+          statusDiv.textContent = "Experiment cancelled.";
+          progressBar.style.width = "0%";
+          startBtn.disabled = false;
+          pauseBtn.disabled = true;
+          cancelBtn.disabled = true;
+          pauseBtn.textContent = "Pause";
+        }
+      });
+
+      const socket = new WebSocket("ws://localhost:5500");
+
+      socket.onopen = () => {
+        console.log("Connected to server");
+        // socket.send("startUp")
+      };
+
+      function experimentStart(name, duration) {
+        console.log(
+          `Experimented ${name} started for ${duration} seconds `,
+          new Date().toISOString()
+        );
+        let sending_obj = {};
+        sending_obj.id = "StartExperiment";
+        sending_obj.name = name;
+        sending_obj.duration = duration;
+        socket.send(JSON.stringify(sending_obj));
+      }
+
+      function experimentUpdate(name, state) {
+        console.log(
+          `Experimented ${name} state has been changed to ${state} `,
+          new Date().toISOString()
+        );
+        let sending_obj = {};
+        sending_obj.id = "UpdateExperiment";
+        sending_obj.name = name;
+        sending_obj.state = state;
+        socket.send(JSON.stringify(sending_obj));
+      }
+
+      renderLogs();
+    </script>
+  </body>
+</html>
