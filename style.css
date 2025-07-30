@@ -1,0 +1,693 @@
+/* Base Styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #111;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  overflow-y: auto;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #ffed00;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  font-weight: bold;
+}
+
+.logo {
+  color: #000;
+  font-size: 1.4rem;
+}
+
+.nav-menu a {
+  color: #000;
+  margin-left: 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+  text-decoration: underline;
+  color: #333;
+}
+
+/* Dashboard Layout */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.4fr 1.4fr 1.4fr;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  align-items: start;
+  height: calc(100vh - 60px);
+  overflow-y: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Panels */
+.left-panel,
+.right-panel,
+.central-panel {
+  background-color: #222;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffed00 transparent;
+  overflow-x: auto;
+}
+
+.central-panel {
+  padding: 1.2rem;
+}
+
+.left-panel::-webkit-scrollbar,
+.right-panel::-webkit-scrollbar,
+.central-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.left-panel::-webkit-scrollbar-thumb,
+.right-panel::-webkit-scrollbar-thumb,
+.central-panel::-webkit-scrollbar-thumb {
+  background-color: #ffed00;
+  border-radius: 8px;
+}
+
+/* Overview grid */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.overview-item {
+  background-color: #333;
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  min-width: 120px;
+  user-select: none;
+}
+
+.overview-item h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #ffed00;
+}
+
+.overview-item p {
+  font-size: 1.3rem;
+  margin: 0.4rem 0 0;
+  font-weight: 700;
+}
+
+/* Buttons */
+.main-buttons {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+  overflow-x: auto;
+}
+
+.main-btn {
+  padding: 0.7rem 2.5rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  user-select: none;
+  min-width: 120px;
+  text-align: center;
+}
+
+.main-btn.inactive {
+  background-color: #555555;
+  color: #bbb;
+}
+
+.main-btn.start.active {
+  background-color: #00d35f;
+}
+
+.main-btn.stop.active {
+  background-color: #f01109;
+}
+
+.developer-features {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.developer-button {
+  padding: 0.7rem 1rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  user-select: none;
+  min-width: 120px;
+  text-align: center;
+}
+
+.developer-button.inactive {
+  background-color: #555555;
+  color: #bbb;
+}
+
+.developer-button.active {
+  background-color: #05d9ff;
+}
+
+/* Sensor grid */
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sensor {
+  background-color: #333;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  font-size: 0.9rem;
+  min-width: 140px;
+}
+
+.sensor .label {
+  font-weight: 700;
+  color: #ffed00;
+  font-size: 0.9rem;
+}
+
+.sensor .value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Pumps & Water level */
+.pump-water-section {
+  background-color: #292929;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1.2rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#pumpWaterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pump-water-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+}
+
+.pump-water-row > .label {
+  flex: 1;
+  color: #ffed00;
+  font-weight: 700;
+  min-width: 140px;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.pump-water-row > button {
+  flex-basis: 70px;
+  background-color: #000;
+  color: #ffed00;
+  padding: 0.45rem;
+  border: none;
+  border-radius: 7px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  font-size: 0.9rem;
+}
+
+.pump-water-row > button.active {
+  background-color: #ffed00;
+  color: #000;
+}
+
+/* Actuator group */
+.actuator-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  max-height: 48vh;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #ffed00 transparent;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.actuator-group::-webkit-scrollbar {
+  width: 6px;
+}
+
+.actuator-group::-webkit-scrollbar-thumb {
+  background-color: #ffed00;
+  border-radius: 10px;
+}
+
+.actuator {
+  background-color: #333;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.actuator h4 {
+  margin: 0 0.6rem 0 0;
+  color: #ffed00;
+  min-width: 90px;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+button.toggle-btn,
+button.mode-btn {
+  padding: 0.28rem 0.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  user-select: none;
+  min-width: 40px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.toggle-btn {
+  background-color: #000;
+  color: #ffed00;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-btn.active {
+  background-color: #ffed00;
+  color: #000;
+}
+
+.mode-btn {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #666;
+  min-width: 65px;
+}
+
+.mode-btn.active {
+  background-color: #ffed00;
+  color: #000;
+}
+
+/* PID inputs */
+.pid-inputs {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  min-width: 160px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pid-inputs input {
+  width: 40px;
+  padding: 0.16rem;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.pid-inputs.disabled input {
+  background-color: #444;
+  color: #888;
+}
+
+button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+h1 {
+  margin: 1.5rem 0 0.5rem;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Setpoint & actual containers */
+.pid-setpoint-actual {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  min-width: 140px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.setpoint-container,
+.actual-container {
+  background-color: #222;
+  height: 35px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  color: #ffed00;
+  font-size: 0.75rem;
+  user-select: none;
+  min-width: 55px;
+  white-space: nowrap;
+}
+
+.setpoint-container label,
+.actual-container span:first-child {
+  font-weight: 700;
+  margin-bottom: 2px;
+  font-size: 0.75rem;
+}
+
+.setpoint-container input {
+  width: 50px;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+/* Responsive - mobile devices */
+@media (max-width: 900px) {
+  body {
+    font-size: 16px;
+    background-color: #000;
+  }
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1rem;
+  }
+  .logo {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .nav-menu {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .nav-menu a {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  .dashboard {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    height: auto;
+    overflow-y: visible;
+  }
+  .left-panel,
+  .central-panel,
+  .right-panel {
+    max-height: none;
+    overflow-y: visible;
+    padding: 1rem 0.6rem;
+  }
+  .overview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .main-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .pump-water-row {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .pump-water-row > button {
+    width: 100%;
+    flex-basis: auto;
+  }
+  .pump-water-row > .label {
+    min-width: auto;
+    text-align: left;
+  }
+  .actuator-group {
+    max-height: none;
+    overflow-x: auto;
+  }
+  .pid-inputs {
+    min-width: auto;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+  .pid-inputs input {
+    width: 40px;
+    font-size: 1rem;
+  }
+  .setpoint-container,
+  .actual-container {
+    min-width: 60px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Prevent vertical scroll on desktop/laptop */
+@media (min-width: 901px) {
+  html, body {
+    height: 100%;
+    overflow-y: auto;
+  }
+  .dashboard {
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .left-panel,
+  .central-panel,
+  .right-panel {
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+}
+
+/* Enable vertical scroll on mobile */
+@media (max-width: 900px) {
+  html, body {
+    height: auto;
+    overflow-y: auto;
+  }
+  .dashboard {
+    height: auto;
+    overflow-y: auto;
+  }
+  .left-panel,
+  .central-panel,
+  .right-panel {
+    overflow-y: auto;
+    max-height: none;
+  }
+}
+
+/* Optimize for tablets / small laptops (widths between 901px and 1200px) */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: minmax(0, 1fr);
+    grid-template-areas:
+      "left central"
+      "right right";
+    gap: 1rem;
+    height: 100vh;
+    overflow-y: hidden;
+  }
+
+  .left-panel {
+    grid-area: left;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .central-panel {
+    grid-area: central;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .right-panel {
+    grid-area: right;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .main-buttons {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+
+  .pid-inputs {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .setpoint-container,
+  .actual-container {
+    min-width: 60px;
+    font-size: 0.85rem;
+  }
+
+  .actuator-group {
+    max-height: 45vh;
+    overflow-y: auto;
+  }
+
+  .pump-water-row {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .dashboard > * {
+    min-height: 0;
+  }
+}
+
+/* Larger screens adjustments (1200px - 1900px) */
+@media (max-width: 1900px) and (min-width: 1200px) {
+  .actuator {
+    font-size: clamp(0.65rem, 0.7vw, 0.75rem);
+    padding: clamp(0.25rem, 0.3vw, 0.35rem) clamp(0.3rem, 0.35vw, 0.45rem);
+  }
+
+  .actuator h4 {
+    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+    min-width: 65px;
+    margin-right: clamp(0.3rem, 0.4vw, 0.5rem);
+  }
+
+  .pid-inputs input {
+    width: clamp(25px, 1.5vw, 33px);
+    font-size: clamp(0.6rem, 0.7vw, 0.7rem);
+    padding: clamp(0.08rem, 0.15vw, 0.12rem);
+  }
+
+  .pid-inputs {
+    min-width: auto;
+    gap: clamp(0.1rem, 0.2vw, 0.2rem);
+  }
+
+  .setpoint-container,
+  .actual-container {
+    min-width: 45px;
+    font-size: clamp(0.55rem, 0.65vw, 0.65rem);
+  }
+
+  .pump-water-row > .label {
+    font-size: clamp(0.65rem, 0.75vw, 0.85rem);
+    min-width: 110px;
+  }
+
+  .pump-water-row > button {
+    font-size: clamp(0.6rem, 0.7vw, 0.8rem);
+    flex-basis: 55px;
+    padding: clamp(0.25rem, 0.3vw, 0.35rem);
+  }
+
+  .controls {
+    gap: clamp(0.2rem, 0.3vw, 0.4rem);
+  }
+
+  button.toggle-btn,
+  button.mode-btn {
+    min-width: 30px;
+    font-size: clamp(0.55rem, 0.65vw, 0.7rem);
+    padding: clamp(0.15rem, 0.25vw, 0.35rem);
+  }
+
+  .overview-item {
+    min-width: 90px;
+    padding: clamp(0.5rem, 0.6vw, 0.7rem);
+  }
+
+  .overview-item h3 {
+    font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+  }
+
+  .overview-item p {
+    font-size: clamp(1rem, 1vw, 1.1rem);
+  }
+
+  .main-btn {
+    min-width: 90px;
+    font-size: clamp(0.8rem, 0.9vw, 1rem);
+    padding: clamp(0.5rem, 0.7vw, 0.6rem) clamp(1.5rem, 1.8vw, 2rem);
+  }
+
+  .developer-button {
+    min-width: 90px;
+    font-size: clamp(0.8rem, 0.9vw, 1rem);
+    padding: clamp(0.5rem, 0.7vw, 0.6rem) clamp(0.6rem, 0.8vw, 0.8rem);
+  }
+}

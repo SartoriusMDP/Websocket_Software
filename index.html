@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Main Controller</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">Sartorius MDP</div>
+      <nav class="nav-menu">
+        <a href="#" class="active">Main Controller</a>
+        <a
+          href="data.html"
+          class="active"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Data Visualizer</a
+        >
+      </nav>
+    </header>
+    <main class="dashboard">
+      <section class="panel left-panel">
+        <h2>Temperature Sensors</h2>
+        <div class="sensor-grid" id="tempSensors"></div>
+
+        <h2>Peltier PID Control</h2>
+        <div class="actuator-group" id="peltierGroup"></div>
+      </section>
+
+      <section class="central-panel">
+        <h2>System Overview</h2>
+        <div class="overview-grid">
+          <div class="overview-item">
+            <h3>Temp</h3>
+            <p id="averageTemperature">37.5°C</p>
+          </div>
+          <div class="overview-item">
+            <h3>Humidity</h3>
+            <p id="averageHumidity">50%</p>
+          </div>
+          <div class="overview-item">
+            <h3>CO₂</h3>
+            <p id="carbonDioxideReading">400ppm</p>
+          </div>
+          <div class="overview-item">
+            <h3>Current (A)</h3>
+            <p id="currentAmps">2.1</p>
+          </div>
+          <div class="overview-item">
+            <h3>Status</h3>
+            <p id="systemStatus">Running</p>
+          </div>
+          <div class="overview-item">
+            <h3>Max Current</h3>
+            <p id="maxCurrentValue">5.0A</p>
+          </div>
+        </div>
+
+        <div class="main-buttons">
+          <button class="main-btn start" id="startBtn">Start</button>
+          <button class="main-btn stop" id="stopBtn">Stop</button>
+        </div>
+
+        <section class="pump-water-section">
+          <h2>Pumps & Water Level Sensors</h2>
+          <div id="pumpWaterGroup"></div>
+        </section>
+
+        <section class="developer-features">
+          <h2>Developer Mode</h2>
+          <button id="devFeatureBtn" class="developer-button"></button>
+        </section>
+      </section>
+
+      <section class="panel right-panel">
+        <h2>Humidity Sensors</h2>
+        <div class="sensor-grid" id="humiditySensors"></div>
+
+        <h2>Humidity PID Control</h2>
+        <div class="actuator-group" id="humidifierGroup"></div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
